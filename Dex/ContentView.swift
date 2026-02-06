@@ -16,16 +16,45 @@ struct ContentView: View {
         animation: .default)
     private var pokedex: FetchedResults<Pokemon>
     
+    let fetcher = FetchService()
+    
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 ForEach(pokedex) { pokemon in
-                    NavigationLink {
-                        Text(pokemon.name ?? "no name")
-                    } label: {
-                        Text(pokemon.name ?? "no name")
+                    NavigationLink(value: pokemon) {
+                        AsyncImage(url: pokemon.sprite) { image in
+                                image
+                                .resizable()
+                                .scaledToFit()
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .frame(width: 100, height: 100)
+                        
+                        VStack (alignment: .leading) {
+                            Text(pokemon.name!.capitalized)
+                            
+                            HStack {
+                                ForEach(pokemon.types!, id: \.self) { type in
+                                    Text(type.capitalized)
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
+                                        .foregroundStyle(.black)
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 5)
+                                        .background(Color(type.capitalized))
+                                        .clipShape(.capsule)
+                                }
+                            }
+                        }
                     }
                 }
+            }
+            // Destination on pokemon page
+            .navigationTitle("Pokedex")
+            .navigationDestination(for: Pokemon.self) { pokemon in
+                Text(pokemon.name ?? "no name")
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -33,15 +62,41 @@ struct ContentView: View {
                 }
                 ToolbarItem {
                     Button("Add Item", systemImage: "plus") {
-                        
+                        getPokemon()
                     }
                 }
             }
         }
     }
+    
+    private func getPokemon() {
+        Task {
+            for id in 1..<152 {
+                do {
+                    
+                    let fetchedPokemon = try await fetcher.fetchPokemon(id)
+                    let pokemon = Pokemon(context: viewContext)
+                    
+                    pokemon.id = fetchedPokemon.id
+                    pokemon.name = fetchedPokemon.name
+                    pokemon.types = fetchedPokemon.types
+                    pokemon.hp = fetchedPokemon.hp
+                    pokemon.attack = fetchedPokemon.attack
+                    pokemon.specialAttack = fetchedPokemon.specialAttack
+                    pokemon.specialDefense = fetchedPokemon.specialDefense
+                    pokemon.speed = fetchedPokemon.speed
+                    pokemon.sprite = fetchedPokemon.sprite
+                    pokemon.shiny = fetchedPokemon.shiny
+                    
+                    try viewContext.save()
+                    
+                } catch {
+                    print(error)
+                }
+            }
+        }
+    }
 }
-
- 
 
 #Preview {
     ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
