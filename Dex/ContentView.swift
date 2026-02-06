@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import Foundation
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -15,6 +16,30 @@ struct ContentView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Pokemon.id, ascending: true)],
         animation: .default)
     private var pokedex: FetchedResults<Pokemon>
+    
+//    @FetchRequest<Pokemon>(
+//        sortDescriptors: [SortDescriptor(\.id)],
+//        animation: .default
+//    )
+//    
+//    private var pokedex // <- erro
+    
+    @State private var searchText = ""
+    
+    private var dynamicPredicate: NSPredicate {
+        var predicates: [NSPredicate] = []
+        
+        // Search predicate
+        if !searchText.isEmpty {
+            predicates.append(NSPredicate(format: "name contains[c] %@", searchText))
+        }
+        
+        // Filter by favorite
+        
+        
+        // Combine and return it
+        return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+    }
     
     let fetcher = FetchService()
     
@@ -53,6 +78,11 @@ struct ContentView: View {
             }
             // Destination on pokemon page
             .navigationTitle("Pokedex")
+            .searchable(text: $searchText, prompt: "Search a Pokemon")
+            .autocorrectionDisabled()
+            .onChange(of: searchText){
+                pokedex.nsPredicate = dynamicPredicate
+            }
             .navigationDestination(for: Pokemon.self) { pokemon in
                 Text(pokemon.name ?? "no name")
             }
