@@ -8,9 +8,10 @@
 import SwiftData
 import Foundation
 
+@MainActor
 struct PersistenceController {
     
-    @MainActor
+
     static var previewPokemon: Pokemon {
         let decoder = JSONDecoder()
         
@@ -27,7 +28,7 @@ struct PersistenceController {
     static let preview: ModelContainer = {
         let container = try! ModelContainer(for: Pokemon.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
         container.mainContext.insert(previewPokemon)
-        
+         
         return container
     }()
     
