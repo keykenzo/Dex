@@ -53,6 +53,73 @@ import SwiftUI
         }
     }
     
+    enum ALLPokemonType: String, Decodable, CaseIterable, Identifiable {
+        
+        case All
+        case Bug
+        case Dragon
+        case Electric
+        case Fairy
+        case Fighting
+        case Fire
+        case Flying
+        case Ghost
+        case Grass
+        case Ground
+        case Ice
+        case Normal
+        case Poison
+        case Psychic
+        case Rock
+        case Steel
+        case Water
+        
+        var id: ALLPokemonType{
+            self
+        }
+        
+        var icon: String {
+            switch self {
+            case .All:
+                "square.stack.3d.up.fill"
+            case .Bug:
+                "ant.fill"
+            case .Dragon:
+                "lizard.fill"
+            case .Electric:
+                "bolt.fill"
+            case .Fairy:
+                "sparkles"
+            case .Fighting:
+                "figure.martial.arts"
+            case .Fire:
+                "flame.fill"
+            case .Flying:
+                "wind"
+            case .Ghost:
+                "moon.stars.fill"
+            case .Grass:
+                "leaf.fill"
+            case .Ground:
+                "mountain.2.fill"
+            case .Ice:
+                "snowflake"
+            case .Normal:
+                "circle.hexagongrid"
+            case .Poison:
+                "flask.fill"
+            case .Psychic:
+                "eye.fill"
+            case .Rock:
+                "fossil.shell.fill"
+            case .Steel:
+                "hammer.fill"
+            case .Water:
+                "drop.fill"
+            }
+        }
+    }
+    
     required init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(Int.self, forKey: .id)

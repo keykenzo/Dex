@@ -11,38 +11,23 @@ import Foundation
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    
     @Query(sort: \Pokemon.id, animation: .default) private var pokedex: [Pokemon]
-    
-//    @FetchRequest<Pokemon>(sortDescriptors: []) private var all
-    
-//    @FetchRequest(
-//        sortDescriptors: [NSSortDescriptor(keyPath: \Pokemon.id, ascending: true)],
-//        animation: .default)
-//    private var pokedex: FetchedResults<Pokemon>
-    
-//    @FetchRequest<Pokemon>(
-//        sortDescriptors: [SortDescriptor(\.id)],
-//        animation: .default
-//    )
-//    
-//    private var pokedex // <- erro
-    
     @State private var searchText = ""
     @State private var filterByFavorite = false
-    
-    private var dynamicPredicate: Predicate<Pokemon> {
+    @State private var currentSelection = Pokemon.ALLPokemonType.All
+
         
-        #Predicate<Pokemon> { pokemon in
-            if filterByFavorite && !searchText.isEmpty {
-                pokemon.favorite && pokemon.name.localizedStandardContains(searchText)
-            } else if !searchText.isEmpty {
-                pokemon.name.localizedStandardContains(searchText)
-            } else if filterByFavorite {
-                pokemon.favorite
-            } else {
-                true
-            }
+    private var dynamicPredicate: Predicate<Pokemon> {
+        // 1. Preparamos os valores FORA do Predicate
+        let search = searchText.lowercased()
+        let favoriteOnly = filterByFavorite
+        let typeFilter = currentSelection.rawValue.lowercased()
+        
+        // 2. O Predicate agora contém apenas UMA expressão de retorno
+        return #Predicate<Pokemon> { pokemon in
+            (search.isEmpty || pokemon.name.localizedStandardContains(search)) &&
+            (!favoriteOnly || pokemon.favorite) &&
+            (typeFilter == "all" || pokemon.types.contains(typeFilter))
         }
     }
     
@@ -143,7 +128,7 @@ struct ContentView: View {
                     PokemonDetail(pokemon: pokemon)
                 }
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
+                    ToolbarItem(placement: .navigationBarLeading) {
                         Button {
                             withAnimation {
                                 filterByFavorite.toggle()
@@ -158,7 +143,35 @@ struct ContentView: View {
                     //                        getPokemon()
                     //                    }
                     //                }
+                    
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Menu {
+                            Picker("Filter by Type", selection: $currentSelection.animation()) {
+                                ForEach(Pokemon.ALLPokemonType.allCases) { type in
+                                    Label(type.rawValue.capitalized, systemImage: type.icon)
+                                        .tag(type)
+                                }
+                            }
+//                            .onChange(of: currentSelection) {
+//                                print("--- TESTE DE FILTRO ---")
+//                                print("Tipo selecionado no Botão: \(currentSelection.rawValue)")
+//                                
+//                                // Vamos checar o primeiro pokemon da lista como exemplo
+//                                if let primeiroPokemon = pokedex.first {
+//                                    let bateu = primeiroPokemon.types.contains(currentSelection.rawValue.lowercased())
+//                                    print("Testando com: \(primeiroPokemon.name)")
+//                                    print("Tipos dele: \(primeiroPokemon.types)")
+//                                    print("O filtro funcionou? \(bateu ? "✅ SIM" : "❌ NÃO")")
+//                                }
+//                            }
+                        } label: {
+                            Image(systemName: "line.3.horizontal.decrease.circle")
+                        }
+                        .tint(.blue)
+                    }
+                    
                 }
+
             }
         }
 //        .task {

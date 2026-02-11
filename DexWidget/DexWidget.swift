@@ -42,7 +42,7 @@ struct Provider: TimelineProvider {
             
             if let results = try? sharedModelContainer.mainContext.fetch(FetchDescriptor<Pokemon>()) {
                 for hourOffset in 0 ..< 10 {
-                    let entryDate = Calendar.current.date(byAdding: .second, value: hourOffset*60, to: currentDate)!
+                    let entryDate = Calendar.current.date(byAdding: .second, value: hourOffset*5, to: currentDate)!
                     
                     let entryPokemon = results.randomElement()!
                     
