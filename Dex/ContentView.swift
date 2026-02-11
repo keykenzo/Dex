@@ -15,6 +15,7 @@ struct ContentView: View {
     @State private var searchText = ""
     @State private var filterByFavorite = false
     @State private var currentSelection = Pokemon.ALLPokemonType.All
+    @State private var imageByShiny = false
 
         
     private var dynamicPredicate: Predicate<Pokemon> {
@@ -51,7 +52,7 @@ struct ContentView: View {
                     Section {
                         ForEach((try? pokedex.filter(dynamicPredicate)) ?? pokedex) { pokemon in
                             NavigationLink(value: pokemon) {
-                                if pokemon.sprite == nil {
+                                if pokemon.sprite == nil && imageByShiny == false {
                                     AsyncImage(url: pokemon.spriteURL) { image in
                                         image
                                             .resizable()
@@ -60,7 +61,17 @@ struct ContentView: View {
                                         ProgressView()
                                     }
                                     .frame(width: 100, height: 100)
-                                } else {
+                                } else if pokemon.sprite == nil && imageByShiny == true {
+                                    AsyncImage(url: pokemon.shinyURL) { image in
+                                        image
+                                            .resizable()
+                                            .scaledToFit()
+                                    } placeholder: {
+                                        ProgressView()
+                                    }
+                                    .frame(width: 100, height: 100)
+                                }
+                                else {
                                     pokemon.spriteImage
                                         .resizable()
                                         .scaledToFit()
@@ -138,11 +149,17 @@ struct ContentView: View {
                         }
                         .tint(filterByFavorite ? .yellow : .blue)
                     }
-                    //                ToolbarItem {
-                    //                    Button("Add Item", systemImage: "plus") {
-                    //                        getPokemon()
-                    //                    }
-                    //                }
+                    
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            withAnimation {
+                                imageByShiny.toggle()
+                            }
+                        } label: {
+                            Label("Filter list by Shiny", systemImage: imageByShiny ? "wand.and.stars" : "wand.and.stars.inverse")
+                        }
+                        .tint(imageByShiny ? .yellow : .blue)
+                    }
                     
                     ToolbarItem(placement: .topBarTrailing) {
                         Menu {
@@ -152,18 +169,6 @@ struct ContentView: View {
                                         .tag(type)
                                 }
                             }
-//                            .onChange(of: currentSelection) {
-//                                print("--- TESTE DE FILTRO ---")
-//                                print("Tipo selecionado no Botão: \(currentSelection.rawValue)")
-//                                
-//                                // Vamos checar o primeiro pokemon da lista como exemplo
-//                                if let primeiroPokemon = pokedex.first {
-//                                    let bateu = primeiroPokemon.types.contains(currentSelection.rawValue.lowercased())
-//                                    print("Testando com: \(primeiroPokemon.name)")
-//                                    print("Tipos dele: \(primeiroPokemon.types)")
-//                                    print("O filtro funcionou? \(bateu ? "✅ SIM" : "❌ NÃO")")
-//                                }
-//                            }
                         } label: {
                             Image(systemName: "line.3.horizontal.decrease.circle")
                         }
@@ -174,9 +179,7 @@ struct ContentView: View {
 
             }
         }
-//        .task {
-//            getPokemon()
-//        }
+
     }
     
     private func getPokemon(from id: Int) {
@@ -215,3 +218,28 @@ struct ContentView: View {
 #Preview {
     ContentView().modelContainer(PersistenceController.preview)
 }
+
+
+//                            .onChange(of: currentSelection) {
+//                                print("--- TESTE DE FILTRO ---")
+//                                print("Tipo selecionado no Botão: \(currentSelection.rawValue)")
+//
+//                                // Vamos checar o primeiro pokemon da lista como exemplo
+//                                if let primeiroPokemon = pokedex.first {
+//                                    let bateu = primeiroPokemon.types.contains(currentSelection.rawValue.lowercased())
+//                                    print("Testando com: \(primeiroPokemon.name)")
+//                                    print("Tipos dele: \(primeiroPokemon.types)")
+//                                    print("O filtro funcionou? \(bateu ? "✅ SIM" : "❌ NÃO")")
+//                                }
+//                            }
+
+
+//                ToolbarItem {
+//                    Button("Add Item", systemImage: "plus") {
+//                        getPokemon()
+//                    }
+//                }
+
+//        .task {
+//            getPokemon()
+//        }

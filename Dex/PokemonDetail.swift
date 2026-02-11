@@ -48,9 +48,7 @@ struct PokemonDetail: View {
                 ForEach(pokemon.types, id: \.self) { type in
                     Text(type.capitalized)
                         .font(.title2)
-//                        .fontWeight(.semibold)
                         .foregroundStyle(.black)
-//                        .shadow(color: .white, radius: 1)
                         .padding(.vertical, 7)
                         .padding(.horizontal)
                         .background(Color(type.capitalized))
@@ -85,8 +83,8 @@ struct PokemonDetail: View {
                     showShiny.toggle()
                 } label: {
                     Image(systemName: showShiny ? "wand.and.stars" : "wand.and.stars.inverse")
-                        .tint(showShiny ? .yellow : .primary)
                 }
+                .tint(showShiny ? .yellow : .primary)
             }
         }
     }

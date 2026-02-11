@@ -17,18 +17,27 @@ struct Stats: View {
             x: .value("Value", stat.value),
             y: .value("Stat", stat.name)
                 )
+        .cornerRadius(10)
         .annotation(position: .trailing) {
             Text("\(stat.value)")
-                .font(.subheadline)
+                .font(.caption.bold())
                 .foregroundStyle(.secondary)
                 .padding(.top, -5)
             }
         }
-        .frame(height: 200)
+        .frame(height: 250)
         .padding([.horizontal, .bottom])
         .foregroundStyle(pokemon.typeColor)
-        .chartXScale(domain: 0...pokemon.highestStat.value + 10)
+        .chartXAxis(.hidden)
+            .chartYAxis {
+                AxisMarks { _ in
+                    AxisValueLabel()
+                        .font(.subheadline.bold())
+                }
+            }
+        .chartXScale(domain: 0...pokemon.highestStat.value + 20)
     }
+    
 }
 
 #Preview {

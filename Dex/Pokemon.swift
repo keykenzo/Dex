@@ -27,6 +27,7 @@ import SwiftUI
     var sprite: Data?
     var shiny: Data?
     var favorite: Bool = false
+//    var move: [String]
     
     enum CodingKeys: CodingKey {
         case id
@@ -37,6 +38,14 @@ import SwiftUI
         
         enum TypeDictionaryKeys: CodingKey {
             case type
+            
+            enum TypeKeys: CodingKey {
+                case name
+            }
+        }
+        
+        enum moveDictionaryKeys: CodingKey {
+            case move
             
             enum TypeKeys: CodingKey {
                 case name
