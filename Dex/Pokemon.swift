@@ -24,10 +24,13 @@ import SwiftUI
     var speed: Int
     var spriteURL: URL
     var shinyURL: URL
+    var backURL: URL
+    var backShinyURL: URL
     var sprite: Data?
     var shiny: Data?
     var favorite: Bool = false
     var moves: [String] = []
+    
     
     enum CodingKeys: CodingKey {
         case id
@@ -53,6 +56,8 @@ import SwiftUI
         enum SpriteKeys: String, CodingKey {
             case spriteURL = "frontDefault"
             case shinyURL = "frontShiny"
+            case backURL = "backDefault"
+            case backShinyURL = "backShiny"
         }
     }
     
@@ -163,6 +168,8 @@ import SwiftUI
         
         spriteURL = try spriteContainer.decode(URL.self, forKey: .spriteURL)
         shinyURL = try spriteContainer.decode(URL.self, forKey: .shinyURL)
+        backURL = try spriteContainer.decode(URL.self, forKey: .backURL)
+        backShinyURL = try spriteContainer.decode(URL.self, forKey: .backShinyURL)
         
         var decodedMoves: [String] = []
         if let movesContainer = try? container.nestedUnkeyedContainer(forKey: .moves) {
