@@ -61,7 +61,7 @@ struct ContentView: View {
                                         ProgressView()
                                     }
                                     .frame(width: 100, height: 100)
-                                } else if pokemon.sprite == nil && imageByShiny == true {
+                                } else if imageByShiny == true {
                                     AsyncImage(url: pokemon.shinyURL) { image in
                                         image
                                             .resizable()

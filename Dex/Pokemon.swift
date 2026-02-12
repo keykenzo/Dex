@@ -27,7 +27,7 @@ import SwiftUI
     var sprite: Data?
     var shiny: Data?
     var favorite: Bool = false
-//    var move: [String]
+    var moves: [String] = []
     
     enum CodingKeys: CodingKey {
         case id
@@ -35,17 +35,11 @@ import SwiftUI
         case types
         case stats
         case sprites
+        case moves
+        case move
         
         enum TypeDictionaryKeys: CodingKey {
             case type
-            
-            enum TypeKeys: CodingKey {
-                case name
-            }
-        }
-        
-        enum moveDictionaryKeys: CodingKey {
-            case move
             
             enum TypeKeys: CodingKey {
                 case name
@@ -169,6 +163,20 @@ import SwiftUI
         
         spriteURL = try spriteContainer.decode(URL.self, forKey: .spriteURL)
         shinyURL = try spriteContainer.decode(URL.self, forKey: .shinyURL)
+        
+        var decodedMoves: [String] = []
+        if let movesContainer = try? container.nestedUnkeyedContainer(forKey: .moves) {
+            var iterator = movesContainer
+            while !iterator.isAtEnd {
+                let moveEntry = try iterator.nestedContainer(keyedBy: CodingKeys.self)
+                let moveInfo = try moveEntry.nestedContainer(keyedBy: CodingKeys.self, forKey: .move)
+                let moveName = try moveInfo.decode(String.self, forKey: .name)
+                decodedMoves.append(moveName)
+            }
+        }
+        moves = decodedMoves
+        
+        
     }
     
     @MainActor
@@ -231,5 +239,6 @@ import SwiftUI
         let name: String
         let value: Int
     }
+
 }
 

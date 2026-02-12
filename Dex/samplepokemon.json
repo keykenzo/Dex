@@ -70,5 +70,31 @@
         "url": "https://pokeapi.co/api/v2/type/4/"
       }
     }
+  ],
+  "moves": [
+      {
+          "move": {
+              "name": "tackle",
+              "url": "https://pokeapi.co/api/v2/move/33/"
+          }
+      },
+      {
+          "move": {
+              "name": "razor-wind",
+              "url": "https://pokeapi.co/api/v2/move/13/"
+          }
+      },
+      {
+          "move": {
+              "name": "vine-whip",
+              "url": "https://pokeapi.co/api/v2/move/22/"
+          }
+      },
+      {
+          "move": {
+              "name": "headbutt",
+              "url": "https://pokeapi.co/api/v2/move/29/"
+          }
+      }
   ]
 }
