@@ -26,14 +26,6 @@ Here you can see the app in action:
 <img src="https://raw.githubusercontent.com/keykenzo/Dex/swiftdata-challenges/Dex/Screenshots/widgetMidScreen.png" width="200">
 </p>
 
-#### 🌙 Dark Mode & Extras
-<p align="left">
-  <img src="SimpsonsApp/Screenshots/maincharacterdarkmode.png" width="200" hspace="5">
-  <img src="SimpsonsApp/Screenshots/episodesdarkmode.png" width="200" hspace="5">
-  <img src="SimpsonsApp/Screenshots/lisadetailsdarkmode.png" width="200" hspace="5">
-  <img src="SimpsonsApp/Screenshots/locationsdetailsdarkmode.png" width="200" hspace="5">
-</p>
-
 > [!TIP]
 > <p align="left">
 > <p><img src="https://raw.githubusercontent.com/keykenzo/Dex/swiftdata-challenges/Dex/Screenshots/presentation.gif" width="200">
