@@ -113,6 +113,8 @@ struct DexWidgetEntryView : View {
                         .stroke(Color.black, lineWidth: 0.1)
                         .shadow(color: .black.opacity(0.3), radius: 4)
                 }
+                .fixedSize(horizontal: true, vertical: false)
+
         }
     }
     
@@ -162,7 +164,7 @@ struct DexWidget: Widget {
                 }
         }
         .configurationDisplayName("Pokedex")
-        .description("Acompanhe seus Pokémons capturados.")
+        .description("Follow your favorite Pokemon.")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }
